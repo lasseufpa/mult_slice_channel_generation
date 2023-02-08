@@ -18,14 +18,20 @@ function track = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, 
 	end
 
 	# Considering a constant speed per UE
-	speed_per_ue = [1, 1] # m/s
+	speed_per_ue = [1, 1]; # m/s
 
-	# Calculating new position on every 1 milisecond but turning directions in each 1 second
-	total_steps = sampling_frequency * total_simu_time 
+	# Calculating new position on every 1/sampling_rate seconds but turning directions in each turn_time seconds
+	total_steps = sampling_frequency * total_simu_time
+	directions = angle_dir;
+	positions = zeros(n_ues, 3, total_steps);
+	positions(:, :, 1) = initial_positions; # First position is the initial position
+	for n_step=1:total_simu_time
+		disp("Step " + n_step)
+	end 
 
 	l = qd_layout;
 	l.no_rx = n_ues; 
-	l.rx_position = [tracks(:).initial_position]
+	l.rx_position = [tracks(:).initial_position];
 	l.visualize([],[],0); 
 
 	disp("test")
