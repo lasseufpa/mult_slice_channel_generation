@@ -1,7 +1,7 @@
 % close all
 % clear all
-
-rng(10)													% Constant seed
+addpath(genpath(pwd));
+rng(10);										% Constant seed
 
 % s = qd_simulation_parameters;                           % Set up simulation parameters
 % s.show_progress_bars = 1;                               % Show progress bars
@@ -14,5 +14,5 @@ rng(10)													% Constant seed
 % l.randomize_rx_positions( 1000 , 1.5 , 1.5 , 500 );      % 200 m radius, 1.5 m Rx height
 % l.visualize([], [], 0)
 % print("Test")
-create_tracks(1, 1.5, 1000, 200, 10, 1, 1)
+create_tracks(2, 1.5, 1000, 200, 2, 1, 1)
 print("Test")
