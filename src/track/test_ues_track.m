@@ -1,18 +1,35 @@
-% close all
-% clear all
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-% s = qd_simulation_parameters;                           % Set up simulation parameters
-% s.show_progress_bars = 1;                               % Show progress bars
-% s.center_frequency = 2.53e9;                            % Set center frequency
-% s.samples_per_meter = 1;                                % 1 sample per meter
-% s.use_absolute_delays = 1;                              % Include delay of the LOS path
+n_ues = 5;
+ue_height = 1.5;
+max_bs_radius = 1000;
+min_dist_ue_bs = 20;
+sampling_frequency = 10;
+turn_time = 0.1;
+total_simu_time = 1;
+prob_turn = 0.5;
 
-% l = qd_layout(s);                                       % Create new QuaDRiGa layout
-% l.no_rx = 1;                                          % Set number of MTs
-% l.randomize_rx_positions( 1000 , 1.5 , 1.5 , 500 );      % 200 m radius, 1.5 m Rx height
-% l.visualize([], [], 0)
-% print("Test")
-create_tracks(5, 1.5, 1000, 20, 10, 0.1, 1, 0.5)
-print("Test")
+tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time, prob_turn);
+
+l = qd_layout;
+l.no_rx = n_ues; 
+l.rx_position = [tracks(:).initial_position];
+for n_ue=1:n_ues
+	l.rx_track(n_ue).positions = tracks(n_ue).positions;
+	l.rx_track(n_ue).calc_orientation;
+end
+l.visualize([],[],0);
+
+# Basestation cell area (min and max distance)
+hold on
+th = 0:pi/50:2*pi;
+x=0;
+y=0;
+xunit = max_bs_radius * cos(th) + x;
+yunit = max_bs_radius * sin(th) + y;
+h = plot(xunit, yunit);
+xunit = min_dist_ue_bs * cos(th) + x;
+yunit = min_dist_ue_bs * sin(th) + y;
+h = plot(xunit, yunit);  
+hold off
