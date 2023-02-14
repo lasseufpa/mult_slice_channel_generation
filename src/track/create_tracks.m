@@ -1,11 +1,12 @@
-function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time)
+function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time, prob_turn)
 	# n_ue: int
 	# ue_height: meters
 	# max_bs_radius: meters
 	# min_dist_ue_bs: meters
 	# sampling_frequency: Hz
-	# turn_time: milliseconds
+	# turn_time: seconds
 	# total_simu_time: seconds
+	# prob_turn: rate [0,1]
 
 	tracks(n_ues) = qd_track;
 
@@ -22,12 +23,19 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 	end
 
 	# Calculating new position on every 1/sampling_rate seconds but turning directions in each turn_time seconds
-	total_steps = sampling_frequency * total_simu_time;
+	total_steps = round(sampling_frequency * total_simu_time);
+	steps_to_turn = round(turn_time * sampling_frequency);
 	directions = angle_dir;
 	positions = zeros(total_steps, 3, n_ues);
 	positions(1, :, :) = zeros(size(initial_positions)); # First position is the initial position
 	for n_step=2:total_steps
 		fprintf("Step %d \n", n_step)
+
+		# Change directions in each steps_to_turn
+		if mod(n_step,steps_to_turn)==0 & rand()<prob_turn
+			directions = rand(1,n_ues)*2*pi;
+		end
+
 		[positions(n_step, :, :), directions] = move_ues(positions, initial_positions, n_step, speed_per_ue, directions, ue_height, n_ues, max_bs_radius, min_dist_ue_bs);
 	end
 

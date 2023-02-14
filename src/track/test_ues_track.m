@@ -14,5 +14,5 @@ rng(10);										% Constant seed
 % l.randomize_rx_positions( 1000 , 1.5 , 1.5 , 500 );      % 200 m radius, 1.5 m Rx height
 % l.visualize([], [], 0)
 % print("Test")
-create_tracks(2, 1.5, 1000, 200, 10, 1, 1)
+create_tracks(5, 1.5, 1000, 20, 10, 0.1, 1, 0.5)
 print("Test")
