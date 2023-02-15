@@ -68,3 +68,8 @@ axis equal
 % caxis([-150,-90])
 set(gca,'layer','top')                                  % Show grid on top of the map
 title('Beam footprint in dBm');                         % Set plot title
+
+# Channels
+l.update_rate = 1/sampling_frequency;
+channels = l.get_channels;
+disp("Break")
