@@ -44,15 +44,15 @@ layout.set_scenario(scenario);
 set(0,'DefaultFigurePaperSize',[14.5 7.8])              % Adjust paper size for plot
 [map,x_coords,y_coords]=layout.power_map(strcat(scenario,"_LOS"),'quick',10,-1e3,1e3,-1e3,1e3);
 P = zeros(7, 3, size(map(1,1){:}(:,:,1,1))(1), size(map(1,1){:}(:,:,1,1))(1));
-for cell=1:7
+
+for cell_idx=1:7
 	for sector=1:3
-		P(cell, sector, :, :) = 10*log10( map(1,cell){:}(:,:,1,sector) ) + 50;                     % RX copolar power @ 50 dBm TX power (Only target cell)
+		P(cell_idx, sector, :, :) = map(1,cell_idx){:}(:,:,1,sector);
 	end
 end
-# TODO Fix power plot
-P_sum = squeeze(sum(sum(P, 1), 2));
-layout.visualize([],[],0);                                   % Plot layout
-axis([-1e3, 1e3,-1e3,1e3]);                              % Axis
+
+P_sum = 10*log10( squeeze(sum(sum(P, 1), 2)) ) + 50;
+layout.visualize([],[],0)                                   % Plot layout
 hold on
 imagesc( x_coords, y_coords, P_sum );                       % Plot the received power
 hold off
@@ -65,8 +65,8 @@ set(gca,'layer','top')                                  % Show grid on top of th
 title('Beam footprint in dBm');                         % Set plot title
 
 # Builder
-builder = layout.init_builder()
+builder = layout.init_builder();
 gen_parameters(builder);
-cm = get_channels(builder)
+cm = get_channels(builder);
 % channels = l.get_channels;
 disp("Break")
