@@ -1,12 +1,12 @@
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-n_ues = 1;
+n_ues = 10;
 ue_height = 1.5;
-max_bs_radius = 1000;
+max_bs_radius = 500;
 min_dist_ue_bs = 20;
-sampling_frequency = 10;
-turn_time = 0.1;
+sampling_frequency = 1000;
+turn_time = 1;
 total_simu_time = 1;
 prob_turn = 0.5;
 speed_change_steps = [5];
@@ -40,6 +40,9 @@ layout.rx_array = rx_antenna;
 # Scenario
 layout.set_scenario(scenario);
 
+fig_tracks = layout.visualize([],[],0,1);
+saveas(fig_tracks, "results/layout/tracks.png");
+
 % Calculate the beam footprint
 set(0,'DefaultFigurePaperSize',[14.5 7.8])              % Adjust paper size for plot
 [map,x_coords,y_coords]=layout.power_map(strcat(scenario,"_LOS"),'quick',10,-1e3,1e3,-1e3,1e3);
@@ -52,17 +55,17 @@ for cell_idx=1:7
 end
 
 P_sum = 10*log10( squeeze(sum(sum(P, 1), 2)) ) + 50;
-layout.visualize([],[],0)                                   % Plot layout
+fig_power_map = layout.visualize([1:7],[],0,1);                                   % Plot layout
 hold on
 imagesc( x_coords, y_coords, P_sum );                       % Plot the received power
 hold off
-
 colorbar('South')                                       % Show a colorbar
 colmap = colormap;
 colormap( colmap*0.5 + 0.5 );                           % Adjust colors to be "lighter"
 axis equal
 set(gca,'layer','top')                                  % Show grid on top of the map
 title('Beam footprint in dBm');                         % Set plot title
+saveas(fig_power_map, "results/layout/power_map.png");
 
 # Builder
 builder = layout.init_builder();

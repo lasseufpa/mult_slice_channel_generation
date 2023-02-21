@@ -19,12 +19,13 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 
 	# Considering a constant speed per UE
 	# TODO read velocities from external file
+	speeds = speeds./sampling_frequency;
 	speed_per_ue = speeds(1,:); # m/s
 	if size(speed_per_ue)(2)~=n_ues
 		error("Number of UEs differ from the number of velocities provided.");
 	end
 
-	# Calculating new position on every 1/sampling_rate seconds but turning directions in each turn_time seconds
+	# Calculating new position on every 1/sampling_frequency seconds but turning directions in each turn_time seconds
 	total_steps = round(sampling_frequency * total_simu_time);
 	steps_to_turn = round(turn_time * sampling_frequency);
 	directions = angle_dir;
@@ -34,7 +35,7 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 		fprintf("Track Step %d \n", n_step)
 
 		# Change directions in each steps_to_turn
-		if mod(n_step,steps_to_turn)==0 & rand()<prob_turn
+		if mod(n_step,steps_to_turn)==0 && rand()<prob_turn
 			directions = rand(1,n_ues)*2*pi;
 		end
 
