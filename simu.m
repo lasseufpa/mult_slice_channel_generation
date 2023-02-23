@@ -1,16 +1,16 @@
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-n_ues = 10;
+n_ues = 1;
 ue_height = 1.5;
 max_bs_radius = 500;
-min_dist_ue_bs = 20;
+min_dist_ue_bs = 10;
 sampling_frequency = 1000;
 turn_time = 1;
 total_simu_time = 1;
 prob_turn = 0.5;
 speed_change_steps = [5];
-speeds = repmat(3, size(speed_change_steps)(2)+1, n_ues); # Info from sixg_radio_mgmt 
+speeds = repmat(1000, size(speed_change_steps)(2)+1, n_ues); # Info from sixg_radio_mgmt 
 % speeds(2, 3) = 0; # Stopping MT 3 at step 5
 scenario = "3GPP_38.901_UMa";
 
@@ -33,6 +33,8 @@ layout.no_rx = n_ues;
 layout.rx_position = [tracks(:).initial_position];
 for ue_idx=1:n_ues
 	layout.rx_track(ue_idx).positions = tracks(ue_idx).positions;
+	layout.rx_track(ue_idx).no_segments = tracks(ue_idx).no_segments;
+	layout.rx_track(ue_idx).segment_index = tracks(ue_idx).segment_index;
 	layout.rx_track(ue_idx).calc_orientation;
 end
 layout.rx_array = rx_antenna;
