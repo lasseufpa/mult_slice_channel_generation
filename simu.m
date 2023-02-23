@@ -13,6 +13,8 @@ speed_change_steps = [5];
 speeds = repmat(1000, size(speed_change_steps)(2)+1, n_ues); # Info from sixg_radio_mgmt 
 % speeds(2, 3) = 0; # Stopping MT 3 at step 5
 scenario = "3GPP_38.901_UMa";
+plot_track = false
+plot_beam_footprint = false
 
 s = qd_simulation_parameters;                           % New simulation parameters
 s.sample_density = 1.2;                                 % 2.5 samples per half-wavelength
@@ -42,36 +44,44 @@ layout.rx_array = rx_antenna;
 # Scenario
 layout.set_scenario(scenario);
 
-fig_tracks = layout.visualize([],[],0,1);
-saveas(fig_tracks, "results/layout/tracks.png");
-
-% Calculate the beam footprint
-set(0,'DefaultFigurePaperSize',[14.5 7.8])              % Adjust paper size for plot
-[map,x_coords,y_coords]=layout.power_map(strcat(scenario,"_LOS"),'quick',10,-1e3,1e3,-1e3,1e3);
-P = zeros(7, 3, size(map(1,1){:}(:,:,1,1))(1), size(map(1,1){:}(:,:,1,1))(1));
-
-for cell_idx=1:7
-	for sector=1:3
-		P(cell_idx, sector, :, :) = map(1,cell_idx){:}(:,:,1,sector);
-	end
+# Plot track
+if plot_track
+	fig_tracks = layout.visualize([],[],0,1);
+	saveas(fig_tracks, "results/layout/tracks.png");
 end
 
-P_sum = 10*log10( squeeze(sum(sum(P, 1), 2)) ) + 50;
-fig_power_map = layout.visualize([1:7],[],0,1);                                   % Plot layout
-hold on
-imagesc( x_coords, y_coords, P_sum );                       % Plot the received power
-hold off
-colorbar('South')                                       % Show a colorbar
-colmap = colormap;
-colormap( colmap*0.5 + 0.5 );                           % Adjust colors to be "lighter"
-axis equal
-set(gca,'layer','top')                                  % Show grid on top of the map
-title('Beam footprint in dBm');                         % Set plot title
-saveas(fig_power_map, "results/layout/power_map.png");
+% Calculate the beam footprint
+if plot_beam_footprint
+	set(0,'DefaultFigurePaperSize',[14.5 7.8])              % Adjust paper size for plot
+	[map,x_coords,y_coords]=layout.power_map(strcat(scenario,"_LOS"),'quick',10,-1e3,1e3,-1e3,1e3);
+	P = zeros(7, 3, size(map(1,1){:}(:,:,1,1))(1), size(map(1,1){:}(:,:,1,1))(1));
+
+	for cell_idx=1:7
+		for sector=1:3
+			P(cell_idx, sector, :, :) = map(1,cell_idx){:}(:,:,1,sector);
+		end
+	end
+
+	P_sum = 10*log10( squeeze(sum(sum(P, 1), 2)) ) + 50;
+	fig_power_map = layout.visualize([1:7],[],0,1);                                   % Plot layout
+	hold on
+	imagesc( x_coords, y_coords, P_sum );                       % Plot the received power
+	hold off
+	colorbar('South')                                       % Show a colorbar
+	colmap = colormap;
+	colormap( colmap*0.5 + 0.5 );                           % Adjust colors to be "lighter"
+	axis equal
+	set(gca,'layer','top')                                  % Show grid on top of the map
+	title('Beam footprint in dBm');                         % Set plot title
+	saveas(fig_power_map, "results/layout/power_map.png");
+end
 
 # Builder
 builder = layout.init_builder();
 gen_parameters(builder);
-cm = get_channels(builder);
-% channels = l.get_channels;
+channels = get_channels(builder);
+
+for ch_idx = 1:size(channels)(2)
+	channels(ch_idx).mat_save([channels(ch_idx).name, ".mat"])
+end
 disp("Break")
