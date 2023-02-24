@@ -1,3 +1,4 @@
 # Figures
 *.ps
-results/*
+results/*/*
+!*.placeholder

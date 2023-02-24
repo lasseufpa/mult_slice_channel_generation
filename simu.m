@@ -13,8 +13,8 @@ speed_change_steps = [5];
 speeds = repmat(1000, size(speed_change_steps)(2)+1, n_ues); # Info from sixg_radio_mgmt 
 % speeds(2, 3) = 0; # Stopping MT 3 at step 5
 scenario = "3GPP_38.901_UMa";
-plot_track = false
-plot_beam_footprint = false
+plot_track = false;
+plot_beam_footprint = false;
 
 s = qd_simulation_parameters;                           % New simulation parameters
 s.sample_density = 1.2;                                 % 2.5 samples per half-wavelength
@@ -82,6 +82,6 @@ gen_parameters(builder);
 channels = get_channels(builder);
 
 for ch_idx = 1:size(channels)(2)
-	channels(ch_idx).mat_save([channels(ch_idx).name, ".mat"])
+	channels(ch_idx).mat_save(["results/channel/", channels(ch_idx).name, ".mat"])
 end
 disp("Break")
