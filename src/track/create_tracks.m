@@ -50,7 +50,6 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 	for ue_idx=1:n_ues
 		tracks(ue_idx).initial_position = initial_positions(:,ue_idx);
 		tracks(ue_idx).positions = (positions(:, :, ue_idx))';
-		tracks(ue_idx).no_segments = total_steps;
-		tracks(ue_idx).segment_index = 1:total_steps;
+		tracks(ue_idx).split_segment();
 	end
 end

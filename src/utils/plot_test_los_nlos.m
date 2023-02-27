@@ -1,16 +1,21 @@
 tx_number = 1;
 rx_number = 1;
 scenario = "3GPP-38.901-UMa";
-number_segments = 1000;
+number_snapshots = 1000;
 path_channels = "../../results/channel/";
 
-power_time = zeros(1, number_segments);
-los_or_nlos = cell(1, number_segments);
-for idx_segment=1:number_segments
+power_time = [];
+los_or_nlos = cell(1, number_snapshots);
+
+# Get the last segment
+max_segment_number = get_last_segment(path_channels, scenario, tx_number, rx_number);
+cumulative = 0;
+for idx_segment=1:max_segment_number
 	channel_file = dir([path_channels, scenario,"-*_Tx", num2str(tx_number, '%04.f'), "_Rx", num2str(rx_number, '%04.f'), "_seg", num2str(idx_segment, '%04.f'), ".mat"]);
 	los_or_nlos{idx_segment} = erase(lower(channel_file.name(1, size(scenario)(2)+2:size(scenario)(2)+5)), "_");
 	channel_step = qd_channel.mat_load([path_channels, channel_file.name]);
-	power_time(idx_segment) = 10*log10(sum(sum(abs(channel_step.coeff(:,:,:)).^2)));
+	cumulative = cumulative+size(channel_step.coeff)(4);
+	power_time = [power_time, 10*log10(squeeze(sum(sum(sum(abs(channel_step.coeff(:,:,:,:)).^2, 1), 2), 3))')];
 	fprintf("Segment %d \n", idx_segment)
 end
 
