@@ -16,7 +16,7 @@ for idx_segment=1:max_segment_number
 	channel_step = qd_channel.mat_load([path_channels, channel_file.name]);
 	cumulative = cumulative+size(channel_step.coeff)(4);
 	power_time = [power_time, 10*log10(squeeze(sum(sum(sum(abs(channel_step.coeff(:,:,:,:)).^2, 1), 2), 3))')];
-	fprintf("Segment %d \n", idx_segment)
+	fprintf("Segment %d, paths %d, snapshots %d\n", idx_segment, channel_step.no_path, channel_step.no_snap)
 end
 
 set(0,'DefaultFigurePaperSize',[14.5 4.7])              % Change Plot Size 
