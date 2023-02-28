@@ -10,8 +10,8 @@ turn_time = 0.1;
 total_simu_time = 1;
 prob_turn = 0.5;
 speed_change_steps = [5];
-speeds = repmat(200, size(speed_change_steps)(2)+1, n_ues); # Info from sixg_radio_mgmt 
-speeds(2, 3) = 0; # Stopping MT 3 at step 5
+speeds = repmat(200, size(speed_change_steps)(2)+1, n_ues); % Info from sixg_radio_mgmt 
+speeds(2, 3) = 0; % Stopping MT 3 at step 5
 
 tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time, prob_turn, speed_change_steps, speeds);
 
@@ -24,7 +24,7 @@ for n_ue=1:n_ues
 end
 l.visualize([],[],0);
 
-# Basestation cell area (min and max distance)
+% Basestation cell area (min and max distance)
 hold on
 th = 0:pi/50:2*pi;
 x=0;
