@@ -6,6 +6,8 @@ ue_height = 1.5;
 max_bs_radius = 500;
 min_dist_ue_bs = 10;
 sampling_frequency = 1000;
+bandwidth = 100e6; % Hz
+number_subcarriers = 135;
 turn_time = 1;
 total_simu_time = 1;
 prob_turn = 0.5;
@@ -84,4 +86,6 @@ channels = layout.get_channels();
 
 for ch_idx = 1:size(channels, 2)
 	channels(ch_idx).mat_save(['results/channel/', channels(ch_idx).name, '.mat'])
+    freq_channel = channels(ch_idx).fr(bandwidth, number_subcarriers);
+    save(['results/freq_channel/', channels(ch_idx).name, '.mat'], 'freq_channel');
 end
