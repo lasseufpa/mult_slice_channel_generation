@@ -1,12 +1,10 @@
 tx_number = 1;
 rx_number = 1;
-scenario = '3GPP-38.901-UMa';
-number_snapshots = 1000;
 path_channels = 'results/channel/';
 path_result = 'results/layout/';
 
-channel_step = qd_channel.mat_load([path_channels, 'Tx', num2str(tx_number, '%04.f'), '_Rx', num2str(rx_number, '%04.f'), '.mat']);
-power_time = 10*log10(squeeze(sum(sum(sum(abs(channel_step.coeff(:,:,:,:)).^2, 1), 2), 3))');
+channel = qd_channel.mat_load([path_channels, 'Tx', num2str(tx_number, '%04.f'), '_Rx', num2str(rx_number, '%04.f'), '.mat']);
+power_time = 10*log10(squeeze(sum(sum(sum(abs(channel.coeff(:,:,:,:)).^2, 1), 2), 3))');
 
 set(0,'DefaultFigurePaperSize',[14.5 4.7])              % Change Plot Size 
 
