@@ -32,7 +32,7 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 	positions = zeros(total_steps, 3, n_ues);
 	positions(1, :, :) = zeros(size(initial_positions)); % First position is the initial position
 	for n_step=2:total_steps
-		fprintf("Track Step %d \n", n_step)
+		% fprintf("Track Step %d \n", n_step)
 
 		% Change directions in each steps_to_turn
 		if mod(n_step,steps_to_turn)==0 && rand()<prob_turn
