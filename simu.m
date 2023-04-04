@@ -1,8 +1,10 @@
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-num_episodes = 2;
-n_ues = 1;
+scenario_name = "scenario_1";
+root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", scenario_name,"/"];
+num_episodes = 10;
+n_ues = 100;
 ue_height = 1.5;
 max_bs_radius = 500;
 min_dist_ue_bs = 10;
@@ -10,15 +12,12 @@ sampling_frequency = 1000;
 bandwidth = 100e6; % Hz
 number_subcarriers = 135;
 turn_time = 1;
-total_simu_time = 1;
+total_simu_time = 10;
 num_sectors = 1;
 num_cells = 7;
 tx_antenna_type = 'omni';
 inter_site_distance = 1000;
 prob_turn = 0.5;
-speed_change_steps = [5];
-speeds = repmat(1000, size(speed_change_steps, 2)+1, n_ues); % Info from sixg_radio_mgmt 
-% speeds(2, 3) = 0; % Stopping MT 3 at step 5
 scenario = '3GPP_38.901_UMa';
 plot_track = false;
 plot_beam_footprint = false;
@@ -40,6 +39,11 @@ catch ERROR
 end
 
 for episode=1:num_episodes % For each episode
+    % Read UEs information from sixg_radio_mgmt simulator
+    file = load(strjoin([root_path_velocities, "ep_", num2str(episode),".mat"], ''));
+    speed_change_steps = file.speed_change_steps;
+    ues_velocities = file.ues_velocities;
+
     fprintf(['\n\n\n############# Episode ', num2str(episode), '#############\n'])
     
     % Create folders
@@ -48,7 +52,7 @@ for episode=1:num_episodes % For each episode
     mkdir(['results/freq_channel/ep_', num2str(episode)]);
     
     % Tracks
-    tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time, prob_turn, speed_change_steps, speeds);
+    tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs, sampling_frequency, turn_time, total_simu_time, prob_turn, speed_change_steps, ues_velocities);
 
     % Antennas
     [tx_antenna, rx_antenna] = create_antennas(s.center_frequency, tx_antenna_type);

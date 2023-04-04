@@ -18,7 +18,6 @@ function tracks = create_tracks(n_ues, ue_height, max_bs_radius, min_dist_ue_bs,
 	initial_positions = [mag.*cos(angle_dir); mag.*sin(angle_dir); repmat(ue_height, 1, n_ues)];
 
 	% Considering a constant speed per UE
-	% TODO read velocities from external file
 	speeds = speeds./sampling_frequency;
 	speed_per_ue = speeds(1,:); % m/s
 	if size(speed_per_ue, 2)~=n_ues
