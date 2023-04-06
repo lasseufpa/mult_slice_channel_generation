@@ -118,10 +118,10 @@ for episode=1:num_episodes % For each episode
     for ch_idx = 1:size(channels, 2)
         channels(ch_idx).mat_save(['results/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
         freq_channel = channels(ch_idx).fr(bandwidth, number_subcarriers);
+        ue_id = str2num(channels(ch_idx).name(10:13));
         if contains(channels(ch_idx).name, "Tx0001")
            target_cell_power(ue_id,:,:,:,:) = reshape(freq_channel, [1, size(freq_channel)]);
         else
-            ue_id = str2num(channels(ch_idx).name(10:13));
             intercell_interference(ue_id,:,:,:,:) = intercell_interference(ue_id,:,:,:,:) + reshape(freq_channel, [1, size(freq_channel)]);
         end
     end
