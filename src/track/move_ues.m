@@ -12,7 +12,7 @@ function [reshaped_positions, directions] = move_ues (positions, initial_positio
 		end
 	end
 
-	reshaped_positions = reshape([x_positions; y_positions; repmat(ue_height, 1, n_ues)], 1, 3, n_ues);
+	reshaped_positions = reshape([x_positions; y_positions; repmat(0, 1, n_ues)], 1, 3, n_ues);
 
 end
 
