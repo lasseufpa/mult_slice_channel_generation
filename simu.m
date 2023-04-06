@@ -11,6 +11,8 @@ min_dist_ue_bs = 10;
 sampling_frequency = 1000;
 bandwidth = 100e6; % Hz
 number_subcarriers = 135;
+thermal_noise_power = 10e-14;
+transmission_power = 0.1;  % 0.1 Watts = 20 dBm
 turn_time = 1;
 total_simu_time = 10;
 num_sectors = 1;
@@ -111,16 +113,23 @@ for episode=1:num_episodes % For each episode
     % Layout channel generation
     channels = layout.get_channels();
 
+    target_cell_power = zeros(n_ues, 1, num_sectors, number_subcarriers, sampling_frequency*total_simu_time);
     intercell_interference = zeros(n_ues, 1, num_sectors, number_subcarriers, sampling_frequency*total_simu_time);
     for ch_idx = 1:size(channels, 2)
         channels(ch_idx).mat_save(['results/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
         freq_channel = channels(ch_idx).fr(bandwidth, number_subcarriers);
         if contains(channels(ch_idx).name, "Tx0001")
-           save(['results/freq_channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'], 'freq_channel');
+           target_cell_power(ue_id,:,:,:,:) = reshape(freq_channel, [1, size(freq_channel)]);
         else
             ue_id = str2num(channels(ch_idx).name(10:13));
             intercell_interference(ue_id,:,:,:,:) = intercell_interference(ue_id,:,:,:,:) + reshape(freq_channel, [1, size(freq_channel)]);
         end
     end
-    save(['results/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference');
+    
+    if num_sectors == 1
+        spectral_efficiencies_per_rb = log2(1 + (transmission_power/number_subcarriers)*(abs(target_cell_power).^2)./(abs(intercell_interference).^2 + thermal_noise_power));
+        save(['results/freq_channel/ep_', num2str(episode),'/spectral_efficiencies_per_rb.mat'], 'spectral_efficiencies_per_rb');
+    else
+        save(['results/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference');
+    end
 end
