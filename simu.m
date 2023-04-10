@@ -40,7 +40,7 @@ catch ERROR
     % Do nothing
 end
 
-for episode=1:num_episodes % For each episode
+for episode=0:num_episodes-1 % For each episode
     % Read UEs information from sixg_radio_mgmt simulator
     file = load(strjoin([root_path_velocities, "ep_", num2str(episode),".mat"], ''));
     speed_change_steps = file.speed_change_steps;
