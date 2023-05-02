@@ -3,7 +3,7 @@ rng(10);										% Constant seed
 
 scenario_name = "scenario_1";
 root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", scenario_name,"/"];
-num_episodes = 10;
+num_episodes = 1;
 n_ues = 100;
 ue_height = 1.5;
 max_bs_radius = 500;
@@ -16,7 +16,7 @@ transmission_power = 0.1;  % 0.1 Watts = 20 dBm
 turn_time = 1;
 total_simu_time = 10;
 num_sectors = 1;
-num_cells = 7;
+num_cells = 1;
 tx_antenna_type = 'omni';
 inter_site_distance = 1000;
 prob_turn = 0.5;
@@ -40,7 +40,7 @@ catch ERROR
     % Do nothing
 end
 
-for episode=1:num_episodes % For each episode
+for episode=0:(num_episodes-1) % For each episode
     % Read UEs information from sixg_radio_mgmt simulator
     file = load(strjoin([root_path_velocities, "ep_", num2str(episode),".mat"], ''));
     speed_change_steps = file.speed_change_steps;
