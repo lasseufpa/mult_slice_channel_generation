@@ -127,9 +127,8 @@ for episode=0:(num_episodes-1) % For each episode
     end
     
     if num_sectors == 1
-        spectral_efficiencies_per_rb = log2(1 + (transmission_power/number_subcarriers)*(abs(target_cell_power).^2)./(abs(intercell_interference).^2 + thermal_noise_power));
-        save(['results/freq_channel/ep_', num2str(episode),'/spectral_efficiencies_per_rb.mat'], 'spectral_efficiencies_per_rb');
+        save(['results/freq_channel/ep_', num2str(episode),'/target_cell_power.mat'], 'target_cell_power', '-v7.3');
     else
-        save(['results/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference');
+        save(['results/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference', '-v7.3');
     end
 end
