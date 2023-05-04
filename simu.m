@@ -115,7 +115,7 @@ for episode=0:(num_episodes-1) % For each episode
 
     target_cell_power = zeros(n_ues, 1, num_sectors, number_subcarriers, sampling_frequency*total_simu_time);
     intercell_interference = zeros(n_ues, 1, num_sectors, number_subcarriers, sampling_frequency*total_simu_time);
-    for ch_idx = 1:size(channels, 2)
+    for ch_idx = 1:(num_cells*n_ues)
         channels(ch_idx).mat_save(['results/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
         freq_channel = channels(ch_idx).fr(bandwidth, number_subcarriers);
         ue_id = str2num(channels(ch_idx).name(10:13));
