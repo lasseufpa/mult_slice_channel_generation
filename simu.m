@@ -126,6 +126,9 @@ for episode=0:(num_episodes-1) % For each episode
         end
     end
     
+    target_cell_power = abs(target_cell_power).^2;
+    intercell_interference = abs(intercell_interference).^2;
+    
     if num_sectors == 1
         save(['results/freq_channel/ep_', num2str(episode),'/target_cell_power.mat'], 'target_cell_power', '-v7.3');
     else
