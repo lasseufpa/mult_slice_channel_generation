@@ -92,14 +92,17 @@ for episode=0:(config.num_episodes-1) % For each episode
     % Layout channel generation
     [channels, builder] = layout.get_channels();
 
-    target_cell_power = zeros(config.n_ues, 1, config.num_sectors, config.number_subcarriers, config.sampling_frequency*config.total_simu_time);
-    intercell_interference = zeros(config.n_ues, 1, config.num_sectors, config.number_subcarriers, config.sampling_frequency*config.total_simu_time);
+    target_cell_power = zeros(config.n_ues, 1, config.num_sectors, config.num_total_rbs, config.sampling_frequency*config.total_simu_time);
+    intercell_interference = zeros(config.n_ues, 1, config.num_sectors, config.num_total_rbs, config.sampling_frequency*config.total_simu_time);
+    
+    sampled_rbs = config.width_rb/2:config.width_rb:config.width_rb*(config.num_total_rbs);
+    sampled_rbs = sampled_rbs./(config.width_rb*(config.num_total_rbs));
     for ch_idx = 1:(config.num_cells*config.n_ues)
         channels(ch_idx).mat_save(['results/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
-        freq_channel = channels(ch_idx).fr(config.bandwidth, config.number_subcarriers);
+        freq_channel = channels(ch_idx).fr(config.bandwidth, sampled_rbs);
         ue_id = str2num(channels(ch_idx).name(10:13));
         if contains(channels(ch_idx).name, "Tx0001")
-           target_cell_power(ue_id,:,:,:,:) = reshape(freq_channel, [1, size(freq_channel)]);
+           target_cell_power(ue_id,:,:,:,:) = freq_channel;
         else
             intercell_interference(ue_id,:,:,:,:) = intercell_interference(ue_id,:,:,:,:) + reshape(freq_channel, [1, size(freq_channel)]);
         end

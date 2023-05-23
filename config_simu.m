@@ -13,12 +13,12 @@ config.show_progress_bars = true;
 %% Frequency Parameters
 config.center_frequency        = 2.6e9;                                         % Carrier Frequency [Hz]
 config.bandwidth          = 100e6;                                        % Channel Bandwidth [Hz]
-config.subcarrierIdx      = 0.5;                                          % Subcarrier used in Fourier Transform
-config.numOfRBs           = 135;                                            % Number of Used Resource Blocks
-config.numTotalOfRBs      = 135;                                          % Total Number of Resource Blocks
-config.numOfSubcarPerRB   = 12;                                           % Number of Subcarriers per Resource Block
-config.subcarrierWidth    = 60e3;                                         % Subcarrier Spacing [Hz]
-config.widthRB = config.subcarrierWidth * config.numOfSubcarPerRB;    % RB Bandwidth
+config.subcarrier_idx      = 0.5;                                          % Subcarrier used in Fourier Transform
+config.num_rbs           = 135;                                            % Number of Used Resource Blocks
+config.num_total_rbs      = 135;                                          % Total Number of Resource Blocks
+config.num_subcarrier_per_rb   = 12;                                           % Number of Subcarriers per Resource Block
+config.subcarrier_width    = 60e3;                                         % Subcarrier Spacing [Hz]
+config.width_rb = config.subcarrier_width * config.num_subcarrier_per_rb;    % RB Bandwidth
 
 %% Time Parameters
 config.sampling_frequency = 1000;                                         
