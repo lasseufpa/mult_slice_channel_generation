@@ -36,7 +36,7 @@ config.prob_turn = 0.5;
 
 %% Cell Parameters
 config.max_bs_radius = 500;
-config.min_dist_ue_bs = 10;
+config.min_dist_ue_bs = 100;
 config.inter_site_distance = 1000;
 
 %% Scenario Parameters
@@ -52,7 +52,7 @@ config.num_cells = 1;
 config.tx_antenna_type = 'omni';
 
 %% UE Parameters
-config.n_ues = 100;
+config.n_ues = 25;
 config.ue_height   = 1.5;                                                 % UE Height
 end
 
