@@ -1,7 +1,7 @@
 function [config] = config_simu()
 
 %% Simulation Parameters
-config.scenario_name = "scenario_1";
+config.scenario_name = "mult_slice";
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
 config.num_episodes = 1;
 
