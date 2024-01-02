@@ -1,7 +1,7 @@
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-config = mult_slice(); % Change here to the scenario config file you want
+config = mult_slice_simple(); % Change here to the scenario config file you want
 
 s = qd_simulation_parameters;                           % New simulation parameters
 s.sample_density = config.sample_density;                                 % 2.5 samples per half-wavelength

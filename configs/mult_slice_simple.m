@@ -1,7 +1,7 @@
-function [config] = mult_slice()
+function [config] = mult_slice_simple()
 
 %% Simulation Parameters
-config.scenario_name = 'mult_slice';
+config.scenario_name = 'mult_slice_simple';
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
 config.initial_episode = 0;
 config.final_episode = 300;
@@ -54,7 +54,7 @@ config.num_cells = 1;
 config.tx_antenna_type = 'omni';
 
 %% UE Parameters
-config.n_ues = 25;
+config.n_ues = 10;
 config.ue_height   = 1.5;                                                 % UE Height
 end
 
