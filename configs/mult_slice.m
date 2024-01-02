@@ -1,7 +1,7 @@
-function [config] = config_simu()
+function [config] = mult_slice()
 
 %% Simulation Parameters
-config.scenario_name = "mult_slice";
+config.scenario_name = 'mult_slice';
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
 config.initial_episode = 0;
 config.final_episode = 500;
@@ -9,6 +9,7 @@ config.final_episode = 500;
 %% Debug Parameters 
 config.plot_track = false; % Plot UEs positions
 config.plot_beam_footprint = false; % Plot beam footprint
+config.save_time_channel = false; % Save Time channel files
 config.show_progress_bars = true;
 
 %% Frequency Parameters

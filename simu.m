@@ -1,23 +1,13 @@
 addpath(genpath(pwd));
 rng(10);										% Constant seed
 
-config = config_simu();
+config = mult_slice(); % Change here to the scenario config file you want
 
 s = qd_simulation_parameters;                           % New simulation parameters
 s.sample_density = config.sample_density;                                 % 2.5 samples per half-wavelength
 s.center_frequency = config.center_frequency;								% Center frequency at 2.6 GHz
 s.use_absolute_delays = config.use_absolute_delays;                              % Include delay of the LOS path
 s.show_progress_bars = config.show_progress_bars;                               % progress bars
-
-% Removing previous simulation folders
-try
-    warning('off', 'MATLAB:RMDIR:RemovedFromPath');
-    rmdir("results/layout/ep_*", 's');
-    rmdir("results/channel/ep_*", 's');
-    rmdir("results/freq_channel/ep_*", 's');
-catch ERROR
-    % Do nothing
-end
 
 for episode=config.initial_episode:(config.final_episode-1) % For each episode
     % Read UEs information from sixg_radio_mgmt simulator
@@ -28,9 +18,13 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     fprintf(['\n\n\n############# Episode ', num2str(episode), '#############\n'])
     
     % Create folders
-    mkdir(['results/layout/ep_', num2str(episode)]);
-    mkdir(['results/channel/ep_', num2str(episode)]);
-    mkdir(['results/freq_channel/ep_', num2str(episode)]);
+    if config.plot_beam_footprint
+        mkdir(['results/', config.scenario_name, '/layout/ep_', num2str(episode)]);
+    end
+    if config.save_time_channel
+        mkdir(['results/', config.scenario_name, '/channel/ep_', num2str(episode)]);
+    end
+    mkdir(['results/', config.scenario_name, '/freq_channel/ep_', num2str(episode)]);
     
     % Tracks
     tracks = create_tracks(config.n_ues, config.ue_height, config.max_bs_radius, config.min_dist_ue_bs, config.sampling_frequency, config.turn_time, config.total_simu_time, config.prob_turn, speed_change_steps, ues_velocities);
@@ -57,7 +51,7 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     % Plot track
     if config.plot_track
         fig_tracks = layout.visualize([],[],0,1);
-        saveas(fig_tracks, ['results/layout/ep_', episode,'/tracks.png']);
+        saveas(fig_tracks, ['results/', config.scenario_name, '/layout/ep_', episode,'/tracks.png']);
     end
 
     % Calculate the beam footprint
@@ -86,7 +80,7 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
         axis equal
         set(gca,'layer','top')                                  % Show grid on top of the map
         title('Beam footprint in dBm');                         % Set plot title
-        saveas(fig_power_map, ['results/layout/ep_', num2str(episode),'/power_map.png']);
+        saveas(fig_power_map, ['results/', config.scenario_name, '/layout/ep_', num2str(episode),'/power_map.png']);
     end
 
     % Layout channel generation
@@ -98,7 +92,9 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     sampled_rbs = config.width_rb/2:config.width_rb:config.width_rb*(config.num_total_rbs);
     sampled_rbs = sampled_rbs./(config.width_rb*(config.num_total_rbs));
     for ch_idx = 1:(config.num_cells*config.n_ues)
-        channels(ch_idx).mat_save(['results/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
+        if config.save_time_channel
+            channels(ch_idx).mat_save(['results/', config.scenario_name, '/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
+        end
         freq_channel = channels(ch_idx).fr(config.bandwidth, sampled_rbs);
         ue_id = str2num(channels(ch_idx).name(10:13));
         if contains(channels(ch_idx).name, "Tx0001")
@@ -112,8 +108,8 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     intercell_interference = abs(intercell_interference).^2;
     
     if config.num_sectors == 1
-        save(['results/freq_channel/ep_', num2str(episode),'/target_cell_power.mat'], 'target_cell_power', '-v7.3');
+        save(['results/', config.scenario_name, '/freq_channel/ep_', num2str(episode),'/target_cell_power.mat'], 'target_cell_power', '-v7.3');
     else
-        save(['results/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference', '-v7.3');
+        save(['results/', config.scenario_name, '/freq_channel/ep_', num2str(episode),'/intercell_interference.mat'], 'intercell_interference', '-v7.3');
     end
 end
