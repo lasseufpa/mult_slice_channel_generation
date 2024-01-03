@@ -5,7 +5,7 @@ function [reshaped_positions, directions] = move_ues (positions, initial_positio
 	% Move UEs respecting the cell bounds
 	for ue_idx=1:n_ues
 		ue_norm = calc_ue_norm(x_positions(ue_idx), y_positions(ue_idx), initial_positions(1:2,ue_idx));
-		while or(ue_norm > max_bs_radius, ue_norm < min_dist_ue_bs)
+		while or(round(ue_norm,2) > max_bs_radius, round(ue_norm,2) < min_dist_ue_bs)
 			directions(ue_idx) = directions(ue_idx) + pi/4;
 			[x_positions, y_positions] = polar_to_cartesian(positions, n_step, n_ues, speed_per_ue, directions);
 			ue_norm = calc_ue_norm(x_positions(ue_idx), y_positions(ue_idx), initial_positions(1:2,ue_idx));
