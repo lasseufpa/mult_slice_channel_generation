@@ -1,10 +1,10 @@
-function [config] = mult_slice_simple()
+function [config] = mult_slice_fixed()
 
 %% Simulation Parameters
-config.scenario_name = 'mult_slice_simple';
+config.scenario_name = 'mult_slice_fixed';
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
 config.initial_episode = 0;
-config.final_episode = 300;
+config.final_episode = 1000;
 config.seed = 10;
 config.fixed_episode_config = true;
 
@@ -26,8 +26,8 @@ config.width_rb = config.subcarrier_width * config.num_subcarrier_per_rb;    % R
 
 %% Time Parameters
 config.sampling_frequency = 1000;                                         
-config.turn_time = 1;
-config.total_simu_time = 10;
+config.turn_time = 0.3;
+config.total_simu_time = 1;
 config.prob_turn = 0.5;
 
 %% Power Parameters
@@ -39,8 +39,8 @@ config.prob_turn = 0.5;
 
 
 %% Cell Parameters
-config.max_bs_radius = 500;
-config.min_dist_ue_bs = 100;
+config.max_bs_radius = 300;
+config.min_dist_ue_bs = 30;
 config.inter_site_distance = 1000;
 
 %% Scenario Parameters
@@ -56,7 +56,7 @@ config.num_cells = 1;
 config.tx_antenna_type = 'omni';
 
 %% UE Parameters
-config.n_ues = 10;
+config.n_ues = 25;
 config.ue_height   = 1.5;                                                 % UE Height
 end
 

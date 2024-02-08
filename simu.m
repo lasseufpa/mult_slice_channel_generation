@@ -1,8 +1,8 @@
-addpath(genpath(pwd));
-rng(10);										% Constant seed
+addpath(genpath(pwd));										% Constant seed
 
-config = mult_slice_simple(); % Change here to the scenario config file you want
+config = mult_slice_fixed(); % Change here to the scenario config file you want
 
+rng(config.seed);
 s = qd_simulation_parameters;                           % New simulation parameters
 s.sample_density = config.sample_density;                                 % 2.5 samples per half-wavelength
 s.center_frequency = config.center_frequency;								% Center frequency at 2.6 GHz
@@ -14,11 +14,12 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     file = load(strjoin([config.root_path_velocities, "ep_", num2str(episode),".mat"], ''));
     speed_change_steps = file.speed_change_steps;
     ues_velocities = file.ues_velocities;
+    basestation_ue_assoc = file.basestation_ue_assoc;
 
     fprintf(['\n\n\n############# Episode ', num2str(episode), '#############\n'])
     
     % Create folders
-    if config.plot_beam_footprint
+    if or(config.plot_beam_footprint, config.plot_track)
         mkdir(['results/', config.scenario_name, '/layout/ep_', num2str(episode)]);
     end
     if config.save_time_channel
@@ -47,11 +48,16 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
 
     % config.scenario
     layout.set_scenario(config.scenario);
+    
+    % Set pairing in case activated
+    if config.fixed_episode_config
+        layout.pairing = define_pairing(basestation_ue_assoc);
+    end
 
     % Plot track
     if config.plot_track
         fig_tracks = layout.visualize([],[],0,1);
-        saveas(fig_tracks, ['results/', config.scenario_name, '/layout/ep_', episode,'/tracks.png']);
+        saveas(fig_tracks, ['results/', config.scenario_name, '/layout/ep_', num2str(episode),'/tracks.png']);
     end
 
     % Calculate the beam footprint
@@ -91,7 +97,7 @@ for episode=config.initial_episode:(config.final_episode-1) % For each episode
     
     sampled_rbs = config.width_rb/2:config.width_rb:config.width_rb*(config.num_total_rbs);
     sampled_rbs = sampled_rbs./(config.width_rb*(config.num_total_rbs));
-    for ch_idx = 1:(config.num_cells*config.n_ues)
+    for ch_idx = 1:(config.num_cells*size(channels,2))
         if config.save_time_channel
             channels(ch_idx).mat_save(['results/', config.scenario_name, '/channel/ep_', num2str(episode),'/', channels(ch_idx).name, '.mat'])
         end

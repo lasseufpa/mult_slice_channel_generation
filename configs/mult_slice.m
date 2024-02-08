@@ -5,6 +5,8 @@ config.scenario_name = 'mult_slice';
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
 config.initial_episode = 0;
 config.final_episode = 300;
+config.seed = 10;
+config.fixed_episode_config = true;
 
 %% Debug Parameters 
 config.plot_track = false; % Plot UEs positions
