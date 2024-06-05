@@ -3,8 +3,10 @@ function [config] = mult_slice()
 %% Simulation Parameters
 config.scenario_name = 'mult_slice';
 config.root_path_velocities = ["../intent_radio_sched_multi_bs/associations/data/", config.scenario_name,"/"];
-config.initial_episode = 0;
-config.final_episode = 300;
+config.assoc_initial_episode = 0;
+config.assoc_final_episode = 199;
+config.eps_per_assoc = 100;
+config.assoc_single_episode = 10:199;
 config.seed = 10;
 config.fixed_episode_config = true;
 
@@ -26,8 +28,8 @@ config.width_rb = config.subcarrier_width * config.num_subcarrier_per_rb;    % R
 
 %% Time Parameters
 config.sampling_frequency = 1000;                                         
-config.turn_time = 1;
-config.total_simu_time = 10;
+config.turn_time = 0.2;
+config.total_simu_time = 1;
 config.prob_turn = 0.5;
 
 %% Power Parameters
@@ -40,7 +42,7 @@ config.prob_turn = 0.5;
 
 %% Cell Parameters
 config.max_bs_radius = 500;
-config.min_dist_ue_bs = 100;
+config.min_dist_ue_bs = 30;
 config.inter_site_distance = 1000;
 
 %% Scenario Parameters
