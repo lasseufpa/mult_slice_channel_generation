@@ -11,8 +11,8 @@ config.seed = 10;
 config.fixed_episode_config = true;
 
 %% Debug Parameters 
-config.plot_track = false; % Plot UEs positions
-config.plot_beam_footprint = false; % Plot beam footprint
+config.plot_track = true; % Plot UEs positions
+config.plot_beam_footprint = true; % Plot beam footprint
 config.save_time_channel = false; % Save Time channel files
 config.show_progress_bars = true;
 
@@ -41,8 +41,8 @@ config.prob_turn = 0.5;
 
 
 %% Cell Parameters
-config.max_bs_radius = 500;
-config.min_dist_ue_bs = 30;
+config.max_bs_radius = 250;
+config.min_dist_ue_bs = 35;
 config.inter_site_distance = 1000;
 
 %% Scenario Parameters
