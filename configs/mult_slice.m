@@ -41,7 +41,7 @@ config.prob_turn = 0.5;
 
 
 %% Cell Parameters
-config.max_bs_radius = 250;
+config.max_bs_radius = 200;
 config.min_dist_ue_bs = 35;
 config.inter_site_distance = 1000;
 
